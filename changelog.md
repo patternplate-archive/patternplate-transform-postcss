@@ -1,3 +1,13 @@
+<a name="0.1.2"></a>
+## [0.1.2](https://github.com/sinnerschrader/patternplate-transform-postcss/compare/v0.1.1...v0.1.2) (2016-02-22)
+
+
+### Bug Fixes
+
+* resolve Pattern dependencies correctly ([d9ed115](https://github.com/sinnerschrader/patternplate-transform-postcss/commit/d9ed115))
+
+
+
 <a name="0.1.1"></a>
 ## [0.1.1](https://github.com/sinnerschrader/patternplate-transform-postcss/compare/v0.1.0...v0.1.1) (2016-02-22)
 
