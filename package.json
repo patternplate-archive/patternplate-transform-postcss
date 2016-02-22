@@ -17,7 +17,7 @@
     "watch": "watch 'npm run build' source",
     "notify": "echo 'Build ready, happy hacking! ✊' && notify -t $npm_package_name -m 'Build ready, happy hacking! ✊'",
     "commit": "git-cz",
-    "commitmsg": "conventional-changelog-lint --e",
+    "commitmsg": "conventional-changelog-lint -e",
     "changelog": "conventional-changelog --preset angular --infile changelog.md --same-file --output-unreleased",
     "push": "git push && git push --tags && hub release create \"v$(cat .git/RELEASE_VERSION.tmp)\" --message=\"v$(cat .git/RELEASE_VERSION.tmp)\n$(cat .git/COMMITMSG.tmp)\" && npm publish && rm .git/RELEASE_VERSION.tmp && rm .git/COMMITMSG.tmp",
     "release": "npm version $(conventional-recommended-bump -p angular)",
@@ -82,6 +82,7 @@
   "dependencies": {
     "denodeify": "1.2.1",
     "lodash": "4.3.0",
-    "postcss-import": "8.0.2"
+    "postcss-import": "8.0.2",
+    "try-require": "1.2.1"
   }
 }
