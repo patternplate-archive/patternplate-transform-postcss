@@ -63,7 +63,7 @@
     "babel-preset-stage-0": "6.3.13",
     "commitizen": "2.5.0",
     "conventional-changelog-cli": "1.1.1",
-    "conventional-changelog-lint": "0.1.7",
+    "conventional-changelog-lint": "0.1.8",
     "conventional-recommended-bump": "0.1.0",
     "cz-conventional-changelog": "1.1.5",
     "eslint": "1.10.3",
