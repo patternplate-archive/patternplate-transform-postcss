@@ -6,7 +6,7 @@ export default function flatteDependencies(file) {
 					return [
 						...pool,
 						dependency,
-						flatteDependencies(dependency)
+						...flatteDependencies(dependency)
 					];
 				}, [])
 		)

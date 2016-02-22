@@ -1,17 +1,13 @@
-import {
-	dirname
-} from 'path';
+import {dirname} from 'path';
 import {
 	readFile as readFileNodeback
 } from 'fs';
 
 import denodeify from 'denodeify';
-import {
-	find,
-	merge
-} from 'lodash';
+import {find, merge} from 'lodash';
 import postcss from 'postcss';
 import postcssImport from 'postcss-import';
+import {resolve} from 'try-require';
 
 import defaults from './defaults';
 import flattenDependencies from './flatten-dependencies';
@@ -23,7 +19,7 @@ export default () => {
 	return async (file, _, configuration) => {
 		// Merge defaults with user-supplied configuration
 		const settings = merge({}, defaults, configuration);
-		const pool = flattenDependencies(file);
+		const pool = [file, ...flattenDependencies(file)];
 
 		// Assemble plugin configuration
 		const plugins = [
@@ -39,11 +35,40 @@ export default () => {
 				},
 				// either pattern.json dependency or available via npm
 				resolve(id, baseDir) {
-					const baseFile = find(pool, item => dirname(item.path) === baseDir) || {};
-					if ((id in baseFile.dependencies) === false) {
-						return require.resolve(id);
+					const baseName = id === 'Pattern' ?
+						'demo' : 'index';
+
+					const baseFile = find(pool, item => {
+						const {path, basename} = item;
+						return dirname(path) === baseDir &&
+							basename === baseName;
+					}) || {};
+
+					const {dependencies} = baseFile;
+					const dependency = dependencies[id];
+
+					// in dependencies, return path
+					if (dependency) {
+						return dependency.path;
 					}
-					return baseFile.dependencies[id].path;
+
+					// check if available in node_modules
+					const available = resolve(id);
+
+					// in node_modules, return resolved path
+					if (available) {
+						return available;
+					}
+
+					// not available, throw
+					if (available === false) {
+						const message = [
+							`Could not find module "${id}", it is not in "${baseFile}'s"`,
+							`pattern.json and could not be loaded from npm.`,
+							`Available dependencies: ${Object.keys(dependencies).join(', ')}`
+						];
+						throw new Error(message);
+					}
 				}
 			}),
 			...getPlugins(settings)
