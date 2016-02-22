@@ -37,7 +37,7 @@ export default () => {
 					const buffer = await readFile(path);
 					return buffer.toString('utf-8');
 				},
-				// eiter pattern.json dependency or available via npm
+				// either pattern.json dependency or available via npm
 				resolve(id, baseDir) {
 					const baseFile = find(pool, item => dirname(item.path) === baseDir) || {};
 					if ((id in baseFile.dependencies) === false) {
