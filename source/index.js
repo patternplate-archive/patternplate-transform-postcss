@@ -27,11 +27,15 @@ export default () => {
 				// Use dependency file buffer or load from npm
 				async load(path) {
 					const loadedFile = find(pool, {path});
-					if (loadedFile) {
-						return loadedFile.buffer.toString('utf-8');
-					}
-					const buffer = await readFile(path);
-					return buffer.toString('utf-8');
+					const buffer = loadedFile ?
+						loadedFile.source :
+						(await readFile(path));
+
+					const source = buffer instanceof Buffer ?
+						buffer :
+						new Buffer(buffer);
+
+					return source.toString();
 				},
 				// either pattern.json dependency or available via npm
 				resolve(id, baseDir) {
