@@ -1,0 +1,15 @@
+{
+  "rules": {
+    "scope-enum": [
+      2,
+      "always",
+      [
+        "release",
+        "system",
+        "resolve",
+        "transform",
+        "signal"
+      ]
+    ]
+  }
+}
