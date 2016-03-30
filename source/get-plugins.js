@@ -1,4 +1,7 @@
 import {resolve} from 'try-require';
+import {debuglog as createDebugLog} from 'util';
+
+const debuglog = createDebugLog('postcss');
 
 function resolveable(name) {
 	if (!resolve(name)) {
@@ -14,9 +17,11 @@ export default configuration =>
 			const [name] = entry;
 			return resolveable(name);
 		})
-		.reduce((registry, entry) => {
-			const [name, options] = entry;
+		.reduce((registry, entry, index) => {
+			const [name, {options = {}}] = entry;
 			const plugin = require(name);
+			debuglog(`Loading postcss plugin ${name} on index ${index} with config:`);
+			debuglog(options);
 			return [
 				...registry,
 				plugin(options)
