@@ -1,6 +1,6 @@
 {
   "name": "patternplate-transform-postcss",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "patternplate transform applying postcss to css sources",
   "main": "distribution/index.js",
   "files": [
