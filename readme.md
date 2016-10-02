@@ -68,5 +68,11 @@ Via the special order key you can determine the order of plugins during `postcss
 	}
 ```
 
+## See also
+
+* [patternplate](https://github.com/sinnerschrader/patternplate) - Create, show and deliver component libraries
+* [transform-less](https://github.com/sinnerschrader/patternplate-transform-less) - Process LESS to CSS
+* [transform-sass](https://github.com/sinnerschrader/patternplate-transform-sass) - Process SASS to CSS
+
 ---
 Copyright 2016 by [SinnerSchrader Deutschland GmbH](https://github.com/sinnerschrader) and [contributors](./graphs/contributors). Released under the [MIT license]('./license.md').
