@@ -1,3 +1,4 @@
+import codeFrame from 'babel-code-frame';
 import {merge} from 'lodash';
 import postcss from 'postcss';
 
@@ -23,10 +24,36 @@ export default () => {
 
 		// apply postcss
 		const source = file.buffer.toString('utf-8');
+
 		const result = await processor.process(source, {
 			from: file.path
 		});
+
+		const [problem] = (result.messages || [])
+			.filter(message => isImportError(message) || isError(message));
+
+		if (problem) {
+			const error = new Error([
+				problem.text,
+				codeFrame(source, problem.line, problem.column)
+			].join('\n'));
+			error.filename = file.path;
+
+			error.line = problem.line;
+			error.column = problem.column;
+
+			throw error;
+		}
+
 		file.buffer = result.css;
 		return file;
 	};
 };
+
+function isError(message) {
+	return message.type === 'error';
+}
+
+function isImportError(message) {
+	return message.type === 'warning' && message.text.indexOf('Could not find module') === 0;
+}

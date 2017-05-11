@@ -1,10 +1,10 @@
 import {readFile as readFileNodeback} from 'fs';
-import {dirname} from 'path';
+import path from 'path';
 
 import denodeify from 'denodeify';
 import {find} from 'lodash';
 import postcssImport from 'postcss-import';
-import {resolve} from 'try-require';
+import resolveFrom from 'resolve-from';
 
 const readFile = denodeify(readFileNodeback);
 
@@ -24,39 +24,43 @@ export default pool => postcssImport({
 	},
 	// either pattern.json dependency or available via npm
 	resolve(id, baseDir) {
-		const baseName = id === 'Pattern' ?
-			'demo' : 'index';
+		return new Promise((resolve, reject) => {
+			const baseName = id === 'Pattern' ?
+				'demo' : 'index';
 
-		const baseFile = find(pool, item => {
-			const {path, basename} = item;
-			return dirname(path) === baseDir &&
-				basename === baseName;
-		}) || {};
+			const file = find(pool, item => {
+				return path.dirname(item.path) === baseDir && item.basename === baseName;
+			}) || {};
 
-		const {dependencies} = baseFile;
-		const dependency = dependencies[id];
+			const {dependencies} = file;
 
-		// in dependencies, return path
-		if (dependency) {
-			return dependency.path;
-		}
+			const deps = Object.keys(dependencies);
+			const dependency = dependencies[id];
 
-		// check if available in node_modules
-		const available = resolve(id);
+			// in dependencies, return path
+			if (dependency) {
+				return resolve(dependency.path);
+			}
 
-		// in node_modules, return resolved path
-		if (available) {
-			return available;
-		}
+			// check if available in node_modules
+			const available = resolveFrom.silent(process.cwd(), id);
 
-		// not available, throw
-		if (available === false) {
+			// in node_modules, return resolved path
+			if (available) {
+				return resolve(available);
+			}
+
+			// not available, throw
 			const message = [
-				`Could not find module "${id}", it is not in "${baseFile}'s"`,
-				`pattern.json and could not be loaded from npm.`,
-				`Available dependencies: ${Object.keys(dependencies).join(', ')}`
+				`Could not find module "${id}", it is not in`,
+				`${file.pattern.base}/pattern.json and could not be loaded from npm.`,
+				`Available dependencies: ${deps.join(', ')}`
 			];
-			throw new Error(message);
-		}
+
+			const err = new Error(message.join(' '));
+			err.filename = file.path;
+
+			reject(err);
+		});
 	}
 });

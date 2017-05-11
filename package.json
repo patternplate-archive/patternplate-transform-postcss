@@ -82,9 +82,10 @@
     "postcss-import": ">= 8.0.2"
   },
   "dependencies": {
+    "babel-code-frame": "6.22.0",
     "denodeify": "1.2.1",
     "lodash": "4.3.0",
-    "postcss-import": "8.0.2",
-    "try-require": "1.2.1"
+    "postcss-import": "9.1.0",
+    "resolve-from": "3.0.0"
   }
 }
