@@ -1,3 +1,20 @@
+<a name="1.0.0"></a>
+# [1.0.0](https://github.com/sinnerschrader/patternplate-transform-postcss/compare/v0.1.4...v1.0.0) (2017-05-11)
+
+
+### Bug Fixes
+
+* **system:** resolve plugins async from cwd ([70458bb](https://github.com/sinnerschrader/patternplate-transform-postcss/commit/70458bb))
+* always throw when resolving unavailable dependencies ([4ed4bd2](https://github.com/sinnerschrader/patternplate-transform-postcss/commit/4ed4bd2))
+
+
+### BREAKING CHANGES
+
+* * upgrade to postcss-import@9
+* throws for imports previously piped into transpiled result
+
+
+
 <a name="0.1.4"></a>
 ## [0.1.4](https://github.com/sinnerschrader/patternplate-transform-postcss/compare/v0.1.3...v0.1.4) (2016-03-30)
 
