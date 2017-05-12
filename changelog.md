@@ -1,3 +1,13 @@
+<a name="1.0.1"></a>
+## [1.0.1](https://github.com/sinnerschrader/patternplate-transform-postcss/compare/v1.0.0...v1.0.1) (2017-05-12)
+
+
+### Bug Fixes
+
+* refine import error messages ([cc3fd9f](https://github.com/sinnerschrader/patternplate-transform-postcss/commit/cc3fd9f))
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/sinnerschrader/patternplate-transform-postcss/compare/v0.1.4...v1.0.0) (2017-05-11)
 
