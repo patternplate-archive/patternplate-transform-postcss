@@ -11,16 +11,13 @@ const readFile = denodeify(readFileNodeback);
 export default pool => postcssImport({
 	// Use dependency file buffer or load from npm
 	async load(path) {
-		const loadedFile = find(pool, {path});
-		const buffer = loadedFile ?
-			loadedFile.source :
-			(await readFile(path));
+		const file = find(pool, {path});
+		const source = file ?
+			String(file.source) :
+			await readFile(path, 'utf-8');
 
-		const source = buffer instanceof Buffer ?
-			buffer :
-			Buffer.from(buffer);
-
-		return source.toString();
+		const id = file ? file.pattern.id : '';
+		return `/* ${id} */\n${source}`;
 	},
 	// Either pattern.json dependency or available via npm
 	resolve(id, baseDir) {
