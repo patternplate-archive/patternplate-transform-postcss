@@ -22,7 +22,7 @@ export default () => {
 		// Instatiate postcss with plugins
 		const processor = postcss(plugins);
 
-		// apply postcss
+		// Apply postcss
 		const source = file.buffer.toString('utf-8');
 
 		const result = await processor.process(source, {
@@ -33,15 +33,8 @@ export default () => {
 			.filter(message => isImportError(message) || isError(message));
 
 		if (problem) {
-			const error = new Error([
-				problem.text,
-				codeFrame(source, problem.line, problem.column)
-			].join('\n'));
-			error.filename = file.path;
-
-			error.line = problem.line;
-			error.column = problem.column;
-
+			const frame = getCodeFrame(problem);
+			const error = new Error([problem.text, frame].filter(Boolean).join('\n'));
 			throw error;
 		}
 
@@ -55,5 +48,52 @@ function isError(message) {
 }
 
 function isImportError(message) {
-	return message.type === 'warning' && message.text.indexOf('Could not find module') === 0;
+	return message.type === 'warning' && message.plugin === 'postcss-import';
+}
+
+function getCodeFrame(problem) {
+	if (typeof problem !== 'object') {
+		return null;
+	}
+
+	const {line, column} = problem;
+
+	if (typeof line !== 'number' || typeof column !== 'number') {
+		return null;
+	}
+
+	const input = getInput(problem);
+
+	if (typeof input !== 'object') {
+		return null;
+	}
+
+	const {css, file} = input;
+
+	if (typeof css !== 'string') {
+		return null;
+	}
+
+	return [
+		file,
+		codeFrame(css, line, column)
+	].join('\n');
+}
+
+function getInput(problem) {
+	const {node} = problem;
+
+	if (typeof node !== 'object') {
+		return null;
+	}
+
+	const {source} = node;
+
+	if (typeof source !== 'object') {
+		return null;
+	}
+
+	const {input} = source;
+
+	return input;
 }

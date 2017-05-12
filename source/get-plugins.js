@@ -1,16 +1,16 @@
-import resolveNodeback from 'resolve';
 import {debuglog as createDebugLog} from 'util';
+import resolveNodeback from 'resolve';
 
 const debuglog = createDebugLog('postcss');
 const basedir = process.cwd();
 
 function resolve(name, options) {
-	return new Promise((done, reject) => {
-		resolveNodeback(name, options, (error, result) => {
-			if (error) {
-				reject(error);
+	return new Promise((resolve, reject) => {
+		resolveNodeback(name, options, (err, result) => {
+			if (err) {
+				reject(err);
 			}
-			done(result);
+			resolve(result);
 		});
 	});
 }
@@ -18,7 +18,7 @@ function resolve(name, options) {
 async function resolveable(name) {
 	try {
 		return await resolve(name, {basedir});
-	} catch (error) {
+	} catch (err) {
 		throw new Error(`postcss plugin "${name}" is configured but could not be resolved. Is "${name}" installed?`);
 	}
 }

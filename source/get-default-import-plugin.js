@@ -18,11 +18,11 @@ export default pool => postcssImport({
 
 		const source = buffer instanceof Buffer ?
 			buffer :
-			new Buffer(buffer);
+			Buffer.from(buffer);
 
 		return source.toString();
 	},
-	// either pattern.json dependency or available via npm
+	// Either pattern.json dependency or available via npm
 	resolve(id, baseDir) {
 		return new Promise((resolve, reject) => {
 			const baseName = id === 'Pattern' ?
@@ -37,23 +37,23 @@ export default pool => postcssImport({
 			const deps = Object.keys(dependencies);
 			const dependency = dependencies[id];
 
-			// in dependencies, return path
+			// In dependencies, return path
 			if (dependency) {
 				return resolve(dependency.path);
 			}
 
-			// check if available in node_modules
+			// Check if available in node_modules
 			const available = resolveFrom.silent(process.cwd(), id);
 
-			// in node_modules, return resolved path
+			// In node_modules, return resolved path
 			if (available) {
 				return resolve(available);
 			}
 
-			// not available, throw
+			// Not available, throw
 			const message = [
-				`Could not find module "${id}", it is not in`,
-				`${file.pattern.base}/pattern.json and could not be loaded from npm.`,
+				`Could not find module "${id}", it is not specified in`,
+				`${file.pattern.id}/pattern.json and could not be loaded from npm.`,
 				`Available dependencies: ${deps.join(', ')}`
 			];
 
