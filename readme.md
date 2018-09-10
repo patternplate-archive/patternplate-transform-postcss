@@ -1,3 +1,6 @@
+> # ⚠️ Deprecated
+> Use instead: https://patternplate.github.io/
+
 # patternplate-transform-postcss
 [patternplate](/sinnerschrader/patternplate) patternplate transform applying postcss to css sources
 
